@@ -79,6 +79,22 @@ impl DialOpts {
             DialOpts(Opts::WithoutPeerIdWithAddress(_)) => None,
         }
     }
+
+    /// Get the [`Multiaddr`] specified in a [`DialOpts`] if any.
+    pub fn get_address(&self) -> Option<Multiaddr> {
+        match self {
+            DialOpts(Opts::WithoutPeerIdWithAddress(opt)) => Some(opt.address.clone()),
+            _ => None,
+        }
+    }
+
+    /// Get a set of [`Multiaddr`] specified in a [`DialOpts`] if any.
+    pub fn get_addresses(&self) -> Option<Vec<Multiaddr>> {
+        match self {
+            DialOpts(Opts::WithPeerIdWithAddresses(opt)) => Some(opt.addresses.clone()),
+            _ => None,
+        }
+    }
 }
 
 impl From<Multiaddr> for DialOpts {
