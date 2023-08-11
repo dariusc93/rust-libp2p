@@ -544,6 +544,7 @@ where
     fn add_listener(&mut self, opts: ListenOpts) -> Result<(), TransportError<io::Error>> {
         let addr = opts.address();
         let listener_id = opts.listener_id();
+        let external = opts.external();
 
         if let Err(e) = self.transport.listen_on(listener_id, addr.clone()) {
             self.behaviour
@@ -559,6 +560,10 @@ where
             .on_swarm_event(FromSwarm::NewListener(behaviour::NewListener {
                 listener_id,
             }));
+
+        if external {
+            self.add_external_address(addr.clone())
+        }
 
         Ok(())
     }
