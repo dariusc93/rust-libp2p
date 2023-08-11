@@ -1,10 +1,11 @@
 use crate::ListenerId;
-use libp2p_core::Multiaddr;
+use libp2p_core::{multiaddr::Protocol, Multiaddr};
 
 #[derive(Debug)]
 pub struct ListenOpts {
     id: ListenerId,
     address: Multiaddr,
+    external: bool,
 }
 
 impl ListenOpts {
@@ -12,6 +13,7 @@ impl ListenOpts {
         ListenOpts {
             id: ListenerId::next(),
             address,
+            external: false,
         }
     }
 
@@ -24,10 +26,26 @@ impl ListenOpts {
     pub fn address(&self) -> &Multiaddr {
         &self.address
     }
+
+    /// Determine if address is an external address
+    pub fn external(&self) -> bool {
+        self.external
+    }
+
+    /// Inform swarm to emit an event 
+    pub fn set_as_external(&mut self) {
+        self.external = true;
+    }
 }
 
 impl From<Multiaddr> for ListenOpts {
     fn from(addr: Multiaddr) -> Self {
         ListenOpts::new(addr)
+    }
+}
+
+impl From<Protocol<'_>> for ListenOpts {
+    fn from(protocol: Protocol<'_>) -> Self {
+        ListenOpts::new(protocol.into())
     }
 }
