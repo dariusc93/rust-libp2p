@@ -109,9 +109,9 @@ pub mod derive_prelude {
 
 pub use behaviour::{
     AddressChange, CloseConnection, ConnectionClosed, DialFailure, ExpiredListenAddr,
-    ExternalAddrExpired, ExternalAddresses, FromSwarm, ListenAddresses, ListenFailure,
-    ListenerClosed, ListenerError, NetworkBehaviour, NewExternalAddrCandidate, NewListenAddr,
-    NotifyHandler, PollParameters, ToSwarm,
+    ExternalAddrConfirmed, ExternalAddrExpired, ExternalAddresses, FromSwarm, ListenAddresses,
+    ListenFailure, ListenerClosed, ListenerError, NetworkBehaviour, NewExternalAddrCandidate,
+    NewListenAddr, NotifyHandler, PollParameters, ToSwarm,
 };
 pub use connection::pool::ConnectionCounters;
 pub use connection::{ConnectionError, ConnectionId, SupportedProtocols};
@@ -126,7 +126,6 @@ pub use listen_opts::ListenOpts;
 pub use stream::Stream;
 pub use stream_protocol::{InvalidProtocol, StreamProtocol};
 
-use crate::behaviour::ExternalAddrConfirmed;
 use crate::handler::UpgradeInfoSend;
 use connection::pool::{EstablishedConnection, Pool, PoolConfig, PoolEvent};
 use connection::IncomingInfo;

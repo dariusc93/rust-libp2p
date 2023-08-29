@@ -1,3 +1,9 @@
+## 0.43.4 - unreleased
+- Publicly export ExternalAddrConfirmed.
+  See [PR XXXX]
+
+[PR XXXX]: https://github.com/libp2p/rust-libp2p/pull/XXXX
+
 ## 0.43.3
 
 - Implement `Display` for `ConnectionId`.
