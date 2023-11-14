@@ -208,6 +208,7 @@ impl RecordStore for MemoryStore {
             }
             if providers.is_empty() {
                 e.remove();
+                self.providers.shrink_to_fit();
             }
         }
     }
