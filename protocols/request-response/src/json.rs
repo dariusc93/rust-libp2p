@@ -54,21 +54,30 @@ mod codec {
     /// Max response size in bytes
     const RESPONSE_SIZE_MAXIMUM: u64 = 10 * 1024 * 1024;
 
+    #[derive(Clone)]
     pub struct Codec<Req, Resp> {
+        max_request_size: u64,
+        max_response_size: u64,
         phantom: PhantomData<(Req, Resp)>,
     }
 
     impl<Req, Resp> Default for Codec<Req, Resp> {
         fn default() -> Self {
             Codec {
+                max_response_size: RESPONSE_SIZE_MAXIMUM,
+                max_request_size: REQUEST_SIZE_MAXIMUM,
                 phantom: PhantomData,
             }
         }
     }
 
-    impl<Req, Resp> Clone for Codec<Req, Resp> {
-        fn clone(&self) -> Self {
-            Self::default()
+    impl<Req, Resp> Codec<Req, Resp> {
+        pub fn new(max_request: u64, max_response: u64) -> Self {
+            Self {
+                max_request_size: max_request,
+                max_response_size: max_response,
+                phantom: PhantomData
+            }
         }
     }
 
@@ -88,7 +97,7 @@ mod codec {
         {
             let mut vec = Vec::new();
 
-            io.take(REQUEST_SIZE_MAXIMUM).read_to_end(&mut vec).await?;
+            io.take(self.max_request_size).read_to_end(&mut vec).await?;
 
             Ok(serde_json::from_slice(vec.as_slice())?)
         }
@@ -99,7 +108,7 @@ mod codec {
         {
             let mut vec = Vec::new();
 
-            io.take(RESPONSE_SIZE_MAXIMUM).read_to_end(&mut vec).await?;
+            io.take(self.max_response_size).read_to_end(&mut vec).await?;
 
             Ok(serde_json::from_slice(vec.as_slice())?)
         }
